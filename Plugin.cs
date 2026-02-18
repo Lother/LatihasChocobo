@@ -5,7 +5,6 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Dalamud.Game;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.Command;
@@ -88,7 +87,7 @@ public sealed class Plugin : IDalamudPlugin {
     [PluginService] private static IPluginLog Log { get; set; } = null!;
     [PluginService] private static ICommandManager CommandManager { get; set; } = null!;
     [PluginService] private static IFramework Framework { get; set; } = null!;
-    [PluginService] private static IObjectTable Objects { get; set; } = null!;
+    [PluginService] internal static IObjectTable ObjectTable { get; set; } = null!;
     [PluginService] internal static ISigScanner SigScanner { get; private set; } = null!;
     [PluginService] internal static IClientState ClientState { get; private set; } = null!;
     [PluginService] internal static IGameGui GameGui { get; private set; } = null!;
@@ -105,7 +104,7 @@ public sealed class Plugin : IDalamudPlugin {
     private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
     public static Direction GetTargetSide(IGameObject target) {
-        var player = ClientState.LocalPlayer!;
+        var player = ObjectTable.LocalPlayer!;
         if (!BadObjectType.ContainsKey(target.BaseId) && !GoodObjectType.ContainsKey(target.BaseId)) return Direction.InValid;
         var playerPos = player.Position;
         var targetPos = target.Position;
@@ -131,9 +130,9 @@ public sealed class Plugin : IDalamudPlugin {
     }
 
     internal static IGameObject[] GetEventObjects() {
-        if (ClientState.LocalPlayer is null) return [];
-        return Objects.Where(obj =>
-            Vector3.Distance(ClientState.LocalPlayer.Position, obj.Position) < 75
+        if (ObjectTable.LocalPlayer is null) return [];
+        return ObjectTable.Where(obj =>
+            Vector3.Distance(ObjectTable.LocalPlayer.Position, obj.Position) < 75
             && obj.ObjectKind == ObjectKind.EventObj
         ).ToArray();
     }
@@ -300,7 +299,7 @@ public sealed class Plugin : IDalamudPlugin {
         }
         if (Configuration.MaxLevelMode && DateTime.Now.Ticks - LastPress2 > 75000000) {
             LastPress2 = DateTime.Now.Ticks;
-            TryPress(KC_2);
+            TryPress(Configuration.KC_2);
         }
         L = Configuration.DisableSpeedUpWhenLowHP && HpPercent < RacePercent;
         H = Configuration.EnableSpeedUpWhenHighHP && HpPercent > RacePercent && RacePercent < 25;
@@ -315,16 +314,16 @@ public sealed class Plugin : IDalamudPlugin {
                      })
                      .Where(t => DateTime.Now.Ticks - t.time > PRESS_TIME)
                      .Select(t => t.t.code)) {
-            if (notSpeedHigh && code == KC_W) continue;
+            if (notSpeedHigh && code == Configuration.KC_W) continue;
             SendMessage(mwh, WM_KEYUP, code, 0);
             Log.Info($"WM_KEYUP: {code}");
         }
-        if (notSpeedHigh) TryPress(KC_W);
+        if (notSpeedHigh) TryPress(Configuration.KC_W);
         var maxDist = 114514f;
         IGameObject? target = null;
-        foreach (var obj in Objects) {
+        foreach (var obj in ObjectTable) {
             if (obj.ObjectKind != ObjectKind.EventObj) continue;
-            var newdis = Vector3.Distance(ClientState.LocalPlayer!.Position, obj.Position);
+            var newdis = Vector3.Distance(ObjectTable.LocalPlayer!.Position, obj.Position);
             if (!(newdis < maxDist)) continue;
             target = obj;
             maxDist = newdis;
@@ -333,25 +332,25 @@ public sealed class Plugin : IDalamudPlugin {
         var isBad = BadObjectType.ContainsKey(target.BaseId);
         switch (GetTargetSide(target)) {
             case Direction.Left:
-                SendMessage(mwh, WM_KEYUP, isBad ? KC_A : KC_D, 0);
-                TryPress(isBad ? KC_D : KC_A);
+                SendMessage(mwh, WM_KEYUP, isBad ? Configuration.KC_A : Configuration.KC_D, 0);
+                TryPress(isBad ? Configuration.KC_D : Configuration.KC_A);
                 break;
             case Direction.Right:
-                SendMessage(mwh, WM_KEYUP, isBad ? KC_D : KC_A, 0);
-                TryPress(isBad ? KC_A : KC_D);
+                SendMessage(mwh, WM_KEYUP, isBad ? Configuration.KC_D : Configuration.KC_A, 0);
+                TryPress(isBad ? Configuration.KC_A : Configuration.KC_D);
                 break;
             case Direction.FrontUp:
-                TryPress(KC_SPACE);
+                TryPress(Configuration.KC_SPACE);
                 break;
             case Direction.Front:
-                if (isBad) TryPress(KC_SPACE);
+                if (isBad) TryPress(Configuration.KC_SPACE);
                 break;
             case Direction.InValid:
             default:
                 break;
         }
         canUseItem = CanUseItem();
-        if (Configuration.AutoUseItem && canUseItem) TryPress(KC_1);
+        if (Configuration.AutoUseItem && canUseItem) TryPress(Configuration.KC_1);
     }
 
     private static bool InRace() => ClientState.TerritoryType is 389 or 390 or 391;

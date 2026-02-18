@@ -46,7 +46,7 @@ public class MainWindow() : Window("Chocobo=>CCB?") {
 
     [SuppressMessage("ReSharper", "ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator")]
     public override unsafe void Draw() {
-        if (ClientState.LocalPlayer is null) return;
+        if (ObjectTable.LocalPlayer is null) return;
         if (ImGui.BeginTabBar("tab")) {
             NewTab("赛鸟", () => {
                 if (ImGui.Checkbox("启用", ref Configuration.Enabled)) {
@@ -86,7 +86,7 @@ public class MainWindow() : Window("Chocobo=>CCB?") {
                         obj.Position.X.ToString(),
                         obj.Position.Y.ToString(),
                         obj.Position.Z.ToString(),
-                        ((int)Vector3.Distance(ClientState.LocalPlayer.Position, obj.Position)).ToString(),
+                        ((int)Vector3.Distance(ObjectTable.LocalPlayer.Position, obj.Position)).ToString(),
                         obj.BaseId.ToString(),
                         name
                     ]);
@@ -166,6 +166,38 @@ public class MainWindow() : Window("Chocobo=>CCB?") {
                     ImGui.PopStyleColor();
                 }
                 else ImGui.Text("鼠标移动到配种登记书上以查看");
+            });
+            NewTab("按键", () => {
+                var KC_W = Configuration.KC_W;
+                if (ImGui.InputInt("KC_W(前)", ref KC_W)) {
+                    Configuration.KC_W = KC_W;
+                    Configuration.Save();
+                }
+                var KC_A = Configuration.KC_A;
+                if (ImGui.InputInt("KC_A(左)", ref KC_A)) {
+                    Configuration.KC_A = KC_A;
+                    Configuration.Save();
+                }
+                var KC_D = Configuration.KC_D;
+                if (ImGui.InputInt("KC_D(右)", ref KC_D)) {
+                    Configuration.KC_D = KC_D;
+                    Configuration.Save();
+                }
+                var KC_SPACE = Configuration.KC_SPACE;
+                if (ImGui.InputInt("KC_SPACE(跳)", ref KC_SPACE)) {
+                    Configuration.KC_SPACE = KC_SPACE;
+                    Configuration.Save();
+                }
+                var KC_1 = Configuration.KC_1;
+                if (ImGui.InputInt("KC_1(技能1)", ref KC_1)) {
+                    Configuration.KC_1 = KC_1;
+                    Configuration.Save();
+                }
+                var KC_2 = Configuration.KC_2;
+                if (ImGui.InputInt("KC_2(技能2)", ref KC_2)) {
+                    Configuration.KC_2 = KC_2;
+                    Configuration.Save();
+                }
             });
             ImGui.EndTabBar();
         }
