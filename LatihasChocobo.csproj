@@ -38,9 +38,6 @@
       <Private>false</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include=".github\workflows\pr-build.yml" />
-  </ItemGroup>
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == ''">
     <DalamudLibPath>$(appdata)\XIVLauncherCN\addon\Hooks\dev</DalamudLibPath>
   </PropertyGroup>
