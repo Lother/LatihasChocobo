@@ -1,50 +1,47 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Dalamud.NET.Sdk/14.0.2">
   <PropertyGroup>
-    <Configuration>Release</Configuration>
-    <AssemblyName>LatihasChocobo</AssemblyName>
-    <TargetFramework>net10.0</TargetFramework>
-    <PlatformTarget>x64</PlatformTarget>
-    <Optimize>true</Optimize>
     <OutputPath>bin</OutputPath>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <DebugSymbols>false</DebugSymbols>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <Nullable>enable</Nullable>
-    <DebugType>none</DebugType>
-    <NoWarn>CA1816</NoWarn>
-    <GenerateSatelliteAssembliesForCore>false</GenerateSatelliteAssembliesForCore>
+    <NoWarn>CA1416;CS8524</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
-    <LangVersion>Latest</LangVersion>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <XIVLauncherPath>$(userprofile)\AppData\Roaming\XIVLauncherCN</XIVLauncherPath>
-    <DalamudPath>$(XIVLauncherPath)\addon\Hooks\dev</DalamudPath>
-    <NoWarn>CA1416;</NoWarn>
+    <Version>7.45.2.1</Version>
+    <RepoUrl>https://github.com/Latihas/LatihasChocobo</RepoUrl>
+    <Author>Latihas</Author>
+    <Name>LatihasChocobo</Name>
+    <Description>陆行鸟竞赛自动化</Description>
+    <Punchline>陆行鸟竞赛自动化</Punchline>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Optimize>true</Optimize>
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Dalamud">
-      <HintPath>$(DalamudPath)\Dalamud.dll</HintPath>
+      <HintPath>$(DalamudLibPath)\Dalamud.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="FFXIVClientStructs">
-      <HintPath>$(DalamudPath)\FFXIVClientStructs.dll</HintPath>
+      <HintPath>$(DalamudLibPath)\FFXIVClientStructs.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="ImGui.NET">
-      <HintPath>$(DalamudPath)\Dalamud.Bindings.ImGui.dll</HintPath>
+      <HintPath>$(DalamudLibPath)\Dalamud.Bindings.ImGui.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="InteropGenerator.Runtime">
-      <HintPath>$(DalamudPath)\InteropGenerator.Runtime.dll</HintPath>
+      <HintPath>$(DalamudLibPath)\InteropGenerator.Runtime.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LatihasChocobo.json" CopyToOutputDirectory="PreserveNewest"/>
+    <Content Include=".github\workflows\pr-build.yml" />
   </ItemGroup>
-  <!--  <Target Name="DeleteFiles" AfterTargets="Build">-->
-  <!--    <ItemGroup>-->
-  <!--      <FilesToDelete Include="$(OutputPath)/*" Exclude="$(OutputPath)/LatihasChocobo*"/>-->
-  <!--    </ItemGroup>-->
-  <!--    <Delete Files="@(FilesToDelete)"/>-->
-  <!--  </Target>-->
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == ''">
+    <DalamudLibPath>$(appdata)\XIVLauncherCN\addon\Hooks\dev</DalamudLibPath>
+  </PropertyGroup>
 </Project>
