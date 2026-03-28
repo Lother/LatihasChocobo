@@ -5,7 +5,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <Nullable>enable</Nullable>
-    <NoWarn>CA1416;CA1816;MSB3245;MSB3243</NoWarn>
+    <NoWarn>MSB3245;MSB3243;CA1416;CA1816</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <Version>7.45.2.1</Version>
