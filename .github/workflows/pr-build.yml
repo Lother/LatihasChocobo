@@ -32,5 +32,7 @@ jobs:
         with:
           tag_name: ${{ steps.generate_version.outputs.VERSION }}
           name: Release ${{ steps.generate_version.outputs.VERSION }}
-          files: ./bin/LatihasChocobo/latest.zip
+          files: |
+            ./bin/LatihasChocobo/latest.zip
+            ./bin/LatihasChocobo/LatihasChocobo.json
           generate_release_notes: true
