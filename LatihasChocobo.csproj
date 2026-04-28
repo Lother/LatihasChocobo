@@ -6,12 +6,8 @@
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
   <PropertyGroup>
-    <Version>7.45.2.1</Version>
+    <Version>7.50.0.0</Version>
     <RepoUrl>https://github.com/Latihas/LatihasChocobo</RepoUrl>
-    <Author>Latihas</Author>
-    <Name>LatihasChocobo</Name>
-    <Description>陆行鸟竞赛自动化</Description>
-    <Punchline>陆行鸟竞赛自动化</Punchline>
   </PropertyGroup>
   <PropertyGroup>
     <Optimize>true</Optimize>

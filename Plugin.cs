@@ -355,7 +355,7 @@ public sealed class Plugin : IDalamudPlugin {
 
     private static bool InRace() => ClientState.TerritoryType is 389 or 390 or 391;
 
-    private static void TerritoryChanged(ushort territory) {
+    private static void TerritoryChanged(uint u) {
         if (InRace())
             Task.Run(async () => {
                 await Task.Delay(Configuration.AutoDutyWait * 1000);
